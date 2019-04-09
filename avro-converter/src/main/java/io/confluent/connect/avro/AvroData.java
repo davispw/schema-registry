@@ -1913,6 +1913,9 @@ public class AvroData {
         for (org.apache.avro.Schema.Field avroField : avroSchema.getFields()) {
           Field field = schema.field(avroField.name());
           JsonNode fieldJson = ((JsonNode) value).get(field.name());
+          if (fieldJson == null) {
+              fieldJson = avroField.defaultValue();
+          }
           Object converted = defaultValueFromAvro(
               field.schema(), avroField.schema(), fieldJson, toConnectContext);
           result.put(avroField.name(), converted);
